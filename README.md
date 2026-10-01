@@ -46,6 +46,8 @@ pnpm lint     # lint
 pnpm build    # production build
 ```
 
+The app version (shown in the footer) is the `version` field in `package.json`.
+
 ## Project structure
 
 ```

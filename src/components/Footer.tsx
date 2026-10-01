@@ -1,3 +1,4 @@
+import { APP_VERSION } from "@/lib/version";
 import { intlTag, t, type Dict, type Locale } from "@/i18n";
 
 export function Footer({ dict, locale, latest }: { dict: Dict; locale: Locale; latest: string | null }) {
@@ -15,6 +16,7 @@ export function Footer({ dict, locale, latest }: { dict: Dict; locale: Locale; l
         {" · "}
         {t(dict.footer.latest, { date })}
       </p>
+      <p className="text-xs opacity-70">{`v${APP_VERSION}`}</p>
     </footer>
   );
 }

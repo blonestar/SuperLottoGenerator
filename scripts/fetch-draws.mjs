@@ -12,7 +12,8 @@ const BASE_URL = "https://www.lottery.net/california/superlotto-plus/numbers";
 const USER_AGENT =
   "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36";
 const DELAY_MS = 1000;
-const RETRIES = 3;
+const RETRIES = 5;
+const TIMEOUT_MS = 30000;
 const OUT_FILE = resolve(dirname(fileURLToPath(import.meta.url)), "../data/draws.json");
 
 const MONTHS = ["january", "february", "march", "april", "may", "june", "july", "august", "september", "october", "november", "december"];
@@ -23,12 +24,16 @@ async function fetchPage(year) {
   let lastErr;
   for (let attempt = 1; attempt <= RETRIES; attempt++) {
     try {
-      const res = await fetch(url, { headers: { "User-Agent": USER_AGENT, Accept: "text/html" } });
+      const res = await fetch(url, {
+        headers: { "User-Agent": USER_AGENT, Accept: "text/html" },
+        signal: AbortSignal.timeout(TIMEOUT_MS),
+      });
       if (res.status === 200) return await res.text();
       lastErr = new Error(`HTTP ${res.status} for ${url}`);
       if (res.status >= 400 && res.status < 500 && res.status !== 429) break; // not retryable
     } catch (e) {
       lastErr = e;
+      console.warn(`Attempt ${attempt} for ${url} failed: ${e.cause?.code ?? e.cause?.message ?? e.message}`);
     }
     if (attempt < RETRIES) await sleep(DELAY_MS * 2 * attempt);
   }
@@ -157,6 +162,6 @@ async function main() {
 }
 
 main().catch((e) => {
-  console.error("fetch-draws failed:", e.message);
+  console.error("fetch-draws failed:", e.message, e.cause ?? "");
   process.exit(1);
 });

@@ -8,6 +8,7 @@ export const sr: Dict = {
   },
   header: {
     appName: "SuperLotto Plus generator",
+    unofficial: "Nezvanično · samo za zabavu",
     nextDraw: "Sledeće izvlačenje",
     nextDrawDate: "{date} · 19:57 PT",
     days: "d",
@@ -52,7 +53,7 @@ export const sr: Dict = {
   },
   stats: {
     title: "Učestalost brojeva",
-    subtitle: "Koliko je puta svaki broj izvučen. Svetlije znači češće.",
+    subtitle: "Koliko je puta svaki broj izvučen. Jača boja znači češće.",
     allTime: "Sva izvlačenja",
     last100: "Poslednjih 100",
     mainNumbers: "Brojevi (1–47)",

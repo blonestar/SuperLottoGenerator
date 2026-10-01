@@ -17,8 +17,13 @@ const getServerSnapshot = () => null;
 function Countdown({ dict, locale }: { dict: Dict; locale: Locale }) {
   const nowSec = useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
   const h = dict.header;
-  let main = "--";
-  let sub = " ";
+  let parts: [string, string][] = [
+    ["-", h.days],
+    ["--", h.hours],
+    ["--", h.minutes],
+    ["--", h.seconds],
+  ];
+  let sub = " ";
   if (nowSec !== null) {
     const target = nextDrawAt(nowSec * 1000);
     let left = Math.max(0, Math.floor(target / 1000) - nowSec);
@@ -29,7 +34,12 @@ function Countdown({ dict, locale }: { dict: Dict; locale: Locale }) {
     const mm = Math.floor(left / 60);
     const ss = left % 60;
     const p = (n: number) => String(n).padStart(2, "0");
-    main = `${d}${h.days} ${p(hh)}${h.hours} ${p(mm)}${h.minutes} ${p(ss)}${h.seconds}`;
+    parts = [
+      [String(d), h.days],
+      [p(hh), h.hours],
+      [p(mm), h.minutes],
+      [p(ss), h.seconds],
+    ];
     const dateStr = new Intl.DateTimeFormat(intlTag[locale], {
       weekday: "long",
       day: "numeric",
@@ -39,15 +49,20 @@ function Countdown({ dict, locale }: { dict: Dict; locale: Locale }) {
     sub = t(h.nextDrawDate, { date: dateStr });
   }
   return (
-    <div className="flex w-full items-center justify-between gap-4">
-      <div className="flex flex-col leading-tight min-w-0">
-        <span className="text-xs font-bold uppercase tracking-wider text-muted">{h.nextDraw}</span>
-        <span className="text-xs text-muted" suppressHydrationWarning>
+    <div className="flex flex-wrap items-end justify-between gap-x-6 gap-y-2">
+      <div className="flex flex-col leading-snug min-w-0">
+        <span className="text-xs font-medium uppercase tracking-[0.14em] text-band-muted">{h.nextDraw}</span>
+        <span className="text-sm text-band-fg first-letter:uppercase" suppressHydrationWarning>
           {sub}
         </span>
       </div>
-      <span className="text-xl sm:text-2xl font-extrabold tabular-nums text-accent whitespace-nowrap" suppressHydrationWarning>
-        {main}
+      <span className="font-mono tabular-nums whitespace-nowrap flex items-baseline gap-3 sm:gap-4" suppressHydrationWarning>
+        {parts.map(([v, u], i) => (
+          <span key={i} className="flex items-baseline gap-0.5">
+            <span className="text-3xl sm:text-4xl font-medium text-band-fg">{v}</span>
+            <span className="text-sm text-band-muted">{u}</span>
+          </span>
+        ))}
       </span>
     </div>
   );
@@ -65,7 +80,7 @@ function Segmented<T extends string>({
   onChange: (v: T) => void;
 }) {
   return (
-    <div role="radiogroup" aria-label={label} className="inline-flex rounded-full bg-chip p-1 border border-line">
+    <div role="radiogroup" aria-label={label} className="inline-flex border border-band-line">
       {options.map((o) => {
         const active = o.value === value;
         return (
@@ -77,8 +92,8 @@ function Segmented<T extends string>({
             aria-label={o.label}
             title={o.label}
             onClick={() => onChange(o.value)}
-            className={`h-8 min-w-8 px-2.5 rounded-full text-sm font-bold flex items-center justify-center transition-colors cursor-pointer ${
-              active ? "bg-sky text-[#00263d] shadow-sm" : "text-muted hover:text-fg"
+            className={`h-8 min-w-8 px-2.5 text-xs font-semibold tracking-wide flex items-center justify-center transition-colors cursor-pointer ${
+              active ? "bg-band-fg text-band" : "text-band-muted hover:text-band-fg"
             }`}
           >
             {o.content}
@@ -121,38 +136,43 @@ export function Header({ dict, locale, theme }: { dict: Dict; locale: Locale; th
   };
 
   return (
-    <header className="mx-auto w-full max-w-4xl px-4 pt-5 sm:pt-8" aria-busy={pending}>
-      <div className="flex flex-wrap items-center justify-between gap-3">
-        <div className="flex items-center gap-3">
-          <span className="ball ball-mega ball-sm" aria-hidden style={{ ["--size" as string]: "2.5rem" }}>
-            <svg className="size-5" viewBox="0 0 24 24" fill="#fff8d0" aria-hidden>
-              <path d="M12 3l2.4 5.2 5.6.7-4.1 3.9 1 5.6L12 15.6 7.1 18.4l1-5.6L4 8.9l5.6-.7z" />
-            </svg>
-          </span>
-          <h1 className="text-xl sm:text-2xl font-extrabold tracking-tight">{h.appName}</h1>
+    <header className="bg-band text-band-fg" aria-busy={pending}>
+      <div className="mx-auto w-full max-w-5xl px-4 pt-4 sm:pt-5 pb-7 sm:pb-9">
+        <div className="flex flex-wrap items-center justify-between gap-3">
+          <div className="flex items-center gap-3">
+            <span className="relative flex h-7 w-10 shrink-0" aria-hidden>
+              <span className="absolute left-0 top-0 size-7 rounded-full bg-red" />
+              <span className="absolute right-0 top-0 size-7 rounded-full bg-gold ring-2 ring-band" />
+            </span>
+            <div className="leading-tight">
+              <h1 className="text-base sm:text-lg font-semibold tracking-tight">{h.appName}</h1>
+              <p className="text-xs text-band-muted">{h.unofficial}</p>
+            </div>
+          </div>
+          <div className="flex items-center gap-2">
+            <Segmented
+              label={h.language}
+              value={locale}
+              onChange={changeLang}
+              options={LOCALES.map((l) => ({ value: l, label: l === "en" ? "English" : "Srpski", content: l.toUpperCase() }))}
+            />
+            <Segmented<Theme>
+              label={h.theme}
+              value={theme}
+              onChange={changeTheme}
+              options={[
+                { value: "system", label: h.themeSystem, content: SystemIcon },
+                { value: "light", label: h.themeLight, content: SunIcon },
+                { value: "dark", label: h.themeDark, content: MoonIcon },
+              ]}
+            />
+          </div>
         </div>
-        <div className="flex items-center gap-2">
-          <Segmented
-            label={h.language}
-            value={locale}
-            onChange={changeLang}
-            options={LOCALES.map((l) => ({ value: l, label: l === "en" ? "English" : "Srpski", content: l.toUpperCase() }))}
-          />
-          <Segmented<Theme>
-            label={h.theme}
-            value={theme}
-            onChange={changeTheme}
-            options={[
-              { value: "system", label: h.themeSystem, content: SystemIcon },
-              { value: "light", label: h.themeLight, content: SunIcon },
-              { value: "dark", label: h.themeDark, content: MoonIcon },
-            ]}
-          />
+        <div className="mt-8 sm:mt-10">
+          <Countdown dict={dict} locale={locale} />
         </div>
       </div>
-      <div className="mt-4 card px-5 py-3 flex items-center">
-        <Countdown dict={dict} locale={locale} />
-      </div>
+      <div className="stripe h-1" />
     </header>
   );
 }

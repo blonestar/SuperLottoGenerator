@@ -1,10 +1,15 @@
 import type { Metadata, Viewport } from "next";
-import { Nunito } from "next/font/google";
+import { Geist, Geist_Mono } from "next/font/google";
 import { getPreferences } from "@/i18n/server";
 import "./globals.css";
 
-const nunito = Nunito({
-  variable: "--font-nunito",
+const geist = Geist({
+  variable: "--font-geist",
+  subsets: ["latin", "latin-ext"],
+  display: "swap",
+});
+const geistMono = Geist_Mono({
+  variable: "--font-geist-mono",
   subsets: ["latin", "latin-ext"],
   display: "swap",
 });
@@ -34,15 +39,15 @@ export async function generateMetadata(): Promise<Metadata> {
 
 export const viewport: Viewport = {
   themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#d6f0ff" },
-    { media: "(prefers-color-scheme: dark)", color: "#060b1f" },
+    { media: "(prefers-color-scheme: light)", color: "#1b1530" },
+    { media: "(prefers-color-scheme: dark)", color: "#0b0814" },
   ],
 };
 
 export default async function RootLayout({ children }: LayoutProps<"/">) {
   const { locale, theme } = await getPreferences();
   return (
-    <html lang={locale === "sr" ? "sr-Latn" : "en"} data-theme={theme} className={`${nunito.variable} antialiased`}>
+    <html lang={locale === "sr" ? "sr-Latn" : "en"} data-theme={theme} className={`${geist.variable} ${geistMono.variable} antialiased`}>
       <body className="min-h-screen flex flex-col">{children}</body>
     </html>
   );

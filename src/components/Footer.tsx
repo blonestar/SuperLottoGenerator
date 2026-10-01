@@ -16,7 +16,7 @@ export function Footer({ dict, locale, latest }: { dict: Dict; locale: Locale; l
         {" · "}
         {t(dict.footer.latest, { date })}
       </p>
-      <p className="text-xs opacity-70">{`v${APP_VERSION}`}</p>
+      <p className="text-xs opacity-70">{`v${APP_VERSION} · by Bojan`}</p>
     </footer>
   );
 }

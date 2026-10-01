@@ -1,0 +1,37 @@
+name: Update draws
+
+on:
+  schedule:
+    # Draws are Wed/Sat evening Pacific; run the morning after (Thu/Sun UTC), with a retry.
+    - cron: "0 10 * * 4,0"
+    - cron: "0 18 * * 4,0"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: update-draws
+  cancel-in-progress: false
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - name: Fetch latest draws
+        run: node scripts/fetch-draws.mjs
+      - name: Commit and push if changed
+        run: |
+          if git diff --quiet -- data/draws.json; then
+            echo "No changes."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/draws.json
+          git commit -m "data: update draws $(date -u +%F)"
+          git push

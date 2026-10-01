@@ -2,7 +2,7 @@
 
 A small, fun number generator and stats page for **California SuperLotto Plus** (5 numbers from 1-47 plus a Mega number from 1-27). Built as an experiment, just for fun.
 
-**Live:** _coming soon_
+**Live:** https://super-lotto-predicter.vercel.app
 
 > **Disclaimer:** Lottery draws are random. No method, statistic or "system" can improve your odds of winning. The "Less shared" mode only reduces the chance that you would have to split a jackpot with other players if you win. This project is not affiliated with, endorsed by, or connected to the California Lottery. Please play responsibly.
 

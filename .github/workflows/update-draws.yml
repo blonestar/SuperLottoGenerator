@@ -24,6 +24,9 @@ jobs:
           node-version: 24
       - name: Fetch latest draws
         run: node scripts/fetch-draws.mjs
+        env:
+          # Runners can hang on IPv6 connects to the data source; prefer IPv4.
+          NODE_OPTIONS: --dns-result-order=ipv4first --no-network-family-autoselection
       - name: Commit and push if changed
         run: |
           if git diff --quiet -- data/draws.json; then

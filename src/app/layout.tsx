@@ -9,9 +9,27 @@ const nunito = Nunito({
   display: "swap",
 });
 
+// Vercel injects VERCEL_PROJECT_PRODUCTION_URL (host only, no scheme) at build time; fall back to localhost for local runs.
+const siteUrl = process.env.VERCEL_PROJECT_PRODUCTION_URL
+  ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
+  : `http://localhost:${process.env.PORT ?? 3000}`;
+
 export async function generateMetadata(): Promise<Metadata> {
-  const { dict } = await getPreferences();
-  return { title: dict.meta.title, description: dict.meta.description };
+  const { dict, locale } = await getPreferences();
+  const { title, description } = dict.meta;
+  return {
+    metadataBase: new URL(siteUrl),
+    title,
+    description,
+    openGraph: {
+      type: "website",
+      siteName: "SuperLotto Plus Generator",
+      title,
+      description,
+      locale: locale === "sr" ? "sr_RS" : "en_US",
+    },
+    twitter: { card: "summary_large_image", title, description },
+  };
 }
 
 export const viewport: Viewport = {

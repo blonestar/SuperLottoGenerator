@@ -13,52 +13,47 @@
 }
 
 :root {
-  --bg-top: #d6f0ff;
-  --bg-bottom: #ffffff;
-  --fg: #0b2540;
-  --muted: #4d6a85;
-  --card: #ffffff;
-  --card-border: rgba(0, 120, 190, 0.14);
-  --card-shadow: 0 1px 2px rgba(0, 60, 110, 0.06), 0 10px 30px -10px rgba(0, 110, 180, 0.22);
-  --chip: #eef7fd;
-  --chip-active: #00aeef;
-  --chip-active-fg: #00263d;
-  --ring: #0077b8;
-  --sky: #00aeef;
-  --sun: #ffd400;
-  --orange: #f7941d;
-  --accent-text: #00669f;
+  --bg: #f6f4f1;
+  --surface: #ffffff;
+  --fg: #1b1530;
+  --muted: #6b6478;
+  --line: rgba(27, 21, 48, 0.12);
+  --ring: #22447a;
+  --red: #b33735;
+  --red-hover: #9c2e2c;
+  --red-text: #a52f2d;
+  --red-rgb: 179, 55, 53;
+  --gold: #ffba00;
+  --gold-rgb: 255, 186, 0;
+  --navy: #22447a;
+  /* the top band stays dark in both themes */
+  --band: #1b1530;
+  --band-fg: #f4f1fa;
+  --band-muted: #a79fbb;
+  --band-line: rgba(244, 241, 250, 0.16);
 }
 
 [data-theme="dark"] {
-  --bg-top: #11205a;
-  --bg-bottom: #060b1f;
-  --fg: #e8f1ff;
-  --muted: #9bb0cf;
-  --card: #0e1838;
-  --card-border: rgba(120, 190, 255, 0.16);
-  --card-shadow: 0 1px 2px rgba(0, 0, 0, 0.4), 0 12px 32px -12px rgba(0, 0, 0, 0.7);
-  --chip: #16234d;
-  --chip-active: #00aeef;
-  --chip-active-fg: #00263d;
-  --ring: #7fd6ff;
-  --accent-text: #6cd0ff;
+  --bg: #110d1d;
+  --surface: #191428;
+  --fg: #ece8f4;
+  --muted: #9a93ab;
+  --line: rgba(236, 232, 244, 0.12);
+  --ring: #8fb3ff;
+  --red-text: #ef7470;
+  --band: #0b0814;
 }
 
 @media (prefers-color-scheme: dark) {
   [data-theme="system"] {
-    --bg-top: #11205a;
-    --bg-bottom: #060b1f;
-    --fg: #e8f1ff;
-    --muted: #9bb0cf;
-    --card: #0e1838;
-    --card-border: rgba(120, 190, 255, 0.16);
-    --card-shadow: 0 1px 2px rgba(0, 0, 0, 0.4), 0 12px 32px -12px rgba(0, 0, 0, 0.7);
-    --chip: #16234d;
-    --chip-active: #00aeef;
-    --chip-active-fg: #00263d;
-    --ring: #7fd6ff;
-    --accent-text: #6cd0ff;
+    --bg: #110d1d;
+    --surface: #191428;
+    --fg: #ece8f4;
+    --muted: #9a93ab;
+    --line: rgba(236, 232, 244, 0.12);
+    --ring: #8fb3ff;
+    --red-text: #ef7470;
+    --band: #0b0814;
   }
 }
 
@@ -73,41 +68,43 @@
 }
 
 @theme inline {
-  --font-sans: var(--font-nunito), ui-rounded, system-ui, sans-serif;
+  --font-sans: var(--font-geist), system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, monospace;
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
   --color-fg: var(--fg);
   --color-muted: var(--muted);
-  --color-card: var(--card);
-  --color-line: var(--card-border);
-  --color-chip: var(--chip);
-  --color-sky: var(--sky);
-  --color-sun: var(--sun);
-  --color-sunset: var(--orange);
-  --color-accent: var(--accent-text);
+  --color-line: var(--line);
+  --color-red: var(--red);
+  --color-red-hover: var(--red-hover);
+  --color-accent: var(--red-text);
+  --color-gold: var(--gold);
+  --color-navy: var(--navy);
+  --color-band: var(--band);
+  --color-band-fg: var(--band-fg);
+  --color-band-muted: var(--band-muted);
+  --color-band-line: var(--band-line);
 }
 
 html {
-  background-color: var(--bg-bottom);
+  background-color: var(--bg);
 }
 
 body {
   min-height: 100vh;
   color: var(--fg);
-  font-family: var(--font-nunito), ui-rounded, system-ui, sans-serif;
-  background: linear-gradient(180deg, var(--bg-top) 0%, var(--bg-bottom) 520px) no-repeat;
-  background-color: var(--bg-bottom);
+  background-color: var(--bg);
+  font-family: var(--font-geist), system-ui, sans-serif;
 }
 
 :focus-visible {
-  outline: 3px solid var(--ring);
+  outline: 2px solid var(--ring);
   outline-offset: 2px;
-  border-radius: 0.5rem;
 }
 
-.card {
-  background: var(--card);
-  border: 1px solid var(--card-border);
-  box-shadow: var(--card-shadow);
-  border-radius: 1.5rem;
+/* thin red → navy rule under the top band */
+.stripe {
+  background: linear-gradient(90deg, var(--red) 0%, var(--red) 40%, var(--navy) 100%);
 }
 
 /* ---------- Balls ---------- */
@@ -120,69 +117,36 @@ body {
   width: var(--size);
   height: var(--size);
   border-radius: 9999px;
-  font-weight: 800;
-  font-size: calc(var(--size) * 0.42);
+  font-family: var(--font-geist-mono), ui-monospace, monospace;
+  font-weight: 600;
+  font-size: calc(var(--size) * 0.4);
   line-height: 1;
   font-variant-numeric: tabular-nums;
+  letter-spacing: -0.02em;
   color: #fff;
-  text-shadow: 0 1px 2px rgba(0, 30, 70, 0.55);
-  background: radial-gradient(circle at 32% 26%, #6fd3ff 0%, #12a4ee 30%, #0a7cc4 68%, #05568f 100%);
-  box-shadow:
-    inset -0.18em -0.28em 0.5em rgba(0, 30, 80, 0.4),
-    inset 0.1em 0.14em 0.3em rgba(255, 255, 255, 0.35),
-    0 0.3em 0.7em -0.1em rgba(0, 100, 180, 0.5);
-}
-.ball::after {
-  content: "";
-  position: absolute;
-  top: 9%;
-  left: 17%;
-  width: 38%;
-  height: 24%;
-  border-radius: 50%;
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.75), rgba(255, 255, 255, 0));
-  transform: rotate(-24deg);
-  pointer-events: none;
+  background: var(--red);
+  box-shadow: inset 0 calc(var(--size) * -0.07) 0 rgba(0, 0, 0, 0.18);
 }
 .ball-mega {
-  isolation: isolate;
-  color: #4a2300;
-  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.4);
-  background: radial-gradient(circle at 32% 26%, #fff6a8 0%, #ffd400 32%, #f7941d 78%, #d9700a 100%);
-  box-shadow:
-    inset -0.18em -0.28em 0.5em rgba(150, 60, 0, 0.35),
-    inset 0.1em 0.14em 0.3em rgba(255, 255, 255, 0.5),
-    0 0 1em rgba(255, 190, 20, 0.55),
-    0 0.3em 0.7em -0.1em rgba(220, 120, 0, 0.5);
-}
-/* sun rays */
-.ball-mega::before {
-  content: "";
-  position: absolute;
-  inset: -22%;
-  border-radius: 50%;
-  background: repeating-conic-gradient(from 0deg, rgba(255, 200, 30, 0.55) 0deg 7deg, transparent 7deg 22.5deg);
-  -webkit-mask: radial-gradient(circle closest-side, transparent 70%, #000 74%, #000 80%, transparent 100%);
-  mask: radial-gradient(circle closest-side, transparent 70%, #000 74%, #000 80%, transparent 100%);
-  z-index: -1;
+  color: #1b1530;
+  background: var(--gold);
+  box-shadow: inset 0 calc(var(--size) * -0.07) 0 rgba(140, 80, 0, 0.25);
 }
 .ball-empty {
   background: transparent;
   color: var(--muted);
-  text-shadow: none;
-  border: 2px dashed var(--card-border);
+  border: 1.5px dashed var(--line);
   box-shadow: none;
 }
-.ball-empty::after,
-.ball-empty::before {
-  display: none;
+.ball-empty.ball-mega {
+  border-color: rgba(var(--gold-rgb), 0.7);
 }
 .ball-sm {
   --size: 2rem;
 }
 /* 6 balls must fit one ticket row on narrow phones */
 .ball-lg {
-  --size: clamp(1.9rem, calc((100vw - 8.5rem) / 6), 3.25rem);
+  --size: clamp(1.9rem, calc((100vw - 7rem) / 6), 3.25rem);
 }
 @media (min-width: 40rem) {
   .ball {
@@ -192,34 +156,31 @@ body {
     --size: 2.25rem;
   }
   .ball-lg {
-    --size: 3.75rem;
+    --size: 3.5rem;
   }
 }
 
 @keyframes ball-drop {
   0% {
     opacity: 0;
-    transform: translateY(-9rem) rotate(-300deg) scale(0.6);
+    transform: translateY(-6rem) rotate(-240deg) scale(0.7);
   }
-  45% {
+  50% {
     opacity: 1;
-    transform: translateY(0) rotate(0deg) scale(1.04);
+    transform: translateY(0) rotate(0deg) scale(1.03);
   }
-  62% {
-    transform: translateY(-1.1rem) scale(1);
+  68% {
+    transform: translateY(-0.7rem) scale(1);
   }
-  78% {
-    transform: translateY(0) scale(1.02, 0.96);
-  }
-  90% {
-    transform: translateY(-0.3rem) scale(1);
+  84% {
+    transform: translateY(0) scale(1.02, 0.97);
   }
   100% {
     transform: translateY(0) scale(1);
   }
 }
 .ball-drop {
-  animation: ball-drop 0.95s cubic-bezier(0.3, 0.7, 0.4, 1) both;
+  animation: ball-drop 0.85s cubic-bezier(0.3, 0.7, 0.4, 1) both;
 }
 @keyframes fade-in {
   from {
@@ -238,24 +199,4 @@ body {
     scroll-behavior: auto !important;
     transition-duration: 0.01ms !important;
   }
-}
-
-/* Night stars */
-@media (prefers-color-scheme: dark) {
-  [data-theme="system"] body {
-    background-image:
-      radial-gradient(1.5px 1.5px at 12% 8%, rgba(255, 255, 255, 0.7), transparent),
-      radial-gradient(1.5px 1.5px at 78% 14%, rgba(255, 255, 255, 0.6), transparent),
-      radial-gradient(1px 1px at 40% 22%, rgba(255, 255, 255, 0.5), transparent),
-      radial-gradient(1px 1px at 90% 34%, rgba(255, 255, 255, 0.5), transparent),
-      linear-gradient(180deg, var(--bg-top) 0%, var(--bg-bottom) 520px);
-  }
-}
-[data-theme="dark"] body {
-  background-image:
-    radial-gradient(1.5px 1.5px at 12% 8%, rgba(255, 255, 255, 0.7), transparent),
-    radial-gradient(1.5px 1.5px at 78% 14%, rgba(255, 255, 255, 0.6), transparent),
-    radial-gradient(1px 1px at 40% 22%, rgba(255, 255, 255, 0.5), transparent),
-    radial-gradient(1px 1px at 90% 34%, rgba(255, 255, 255, 0.5), transparent),
-    linear-gradient(180deg, var(--bg-top) 0%, var(--bg-bottom) 520px);
 }

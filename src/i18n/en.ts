@@ -6,6 +6,7 @@ export const en = {
   },
   header: {
     appName: "SuperLotto Plus Generator",
+    unofficial: "Unofficial · just for fun",
     nextDraw: "Next draw",
     nextDrawDate: "{date} · 7:57 pm PT",
     days: "d",
@@ -50,7 +51,7 @@ export const en = {
   },
   stats: {
     title: "Number frequency",
-    subtitle: "How often each number has been drawn. Brighter means more often.",
+    subtitle: "How often each number has been drawn. Stronger color means more often.",
     allTime: "All time",
     last100: "Last 100 draws",
     mainNumbers: "Numbers (1–47)",

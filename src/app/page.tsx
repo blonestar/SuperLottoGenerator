@@ -15,7 +15,7 @@ export default async function Home() {
   return (
     <>
       <Header dict={dict} locale={locale} theme={theme} />
-      <main className="mx-auto w-full max-w-4xl flex-1 px-4 py-6 grid gap-6">
+      <main className="mx-auto w-full max-w-5xl flex-1 px-4">
         <Generator dict={dict} history={history} />
         <Stats dict={dict} stats={stats} />
         <RecentDraws dict={dict} locale={locale} draws={recentDraws()} />
